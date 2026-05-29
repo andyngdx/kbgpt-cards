@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KB GPT Idea Improvement Epistemic Role Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:ital,wght@0,400;0,700;0,800;0,900;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background-color:#F5F0E8;min-height:100vh;color:#2a2a2a;overflow-x:hidden;position:relative;}
+.bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.blob{position:absolute;}
+.blob-tr{top:-140px;right:-140px;width:420px;height:420px;background:radial-gradient(ellipse at center,rgba(45,106,79,0.12) 0%,transparent 70%);border-radius:60% 40% 30% 70%/60% 30% 70% 40%;}
+.blob-bl{bottom:-120px;left:-120px;width:380px;height:380px;background:radial-gradient(ellipse at center,rgba(160,100,40,0.10) 0%,transparent 70%);border-radius:40% 60% 70% 30%/40% 70% 30% 60%;}
+.blob-ml{top:45%;left:-80px;width:200px;height:280px;background:radial-gradient(ellipse at center,rgba(82,183,136,0.07) 0%,transparent 70%);border-radius:30% 70% 70% 30%/30% 30% 70% 70%;}
+.blob-mr{top:30%;right:-60px;width:160px;height:240px;background:radial-gradient(ellipse at center,rgba(180,140,60,0.06) 0%,transparent 70%);border-radius:70% 30% 30% 70%/70% 70% 30% 30%;}
+
+.page{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:52px 24px 80px;}
+
+/* Header */
+.page-header{text-align:center;margin-bottom:44px;}
+.page-eyebrow{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:#2D6A4F;margin-bottom:12px;}
+.page-title{font-family:'Bangers',cursive;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:2px;color:#1B4332;line-height:1.1;margin-bottom:10px;}
+.page-divider{width:60px;height:3px;background:linear-gradient(90deg,#2D6A4F,#52B788);border-radius:2px;margin:14px auto 0;}
+
+/* Filter bar */
+.filter-row{display:flex;justify-content:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.fltr{font-size:12px;font-weight:700;padding:4px 14px;border-radius:20px;border:1.5px solid rgba(45,106,79,0.25);color:#2D6A4F;background:rgba(255,255,255,0.7);cursor:pointer;transition:all .15s;font-family:'Nunito',sans-serif;}
+.fltr:hover{background:rgba(45,106,79,0.08);}
+.fltr.on{color:#fff;background:#2D6A4F;border-color:#2D6A4F;}
+
+/* Cards row — single line */
+.cards-row{display:flex;gap:16px;justify-content:center;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;}
+.card-scene{width:220px;height:350px;perspective:1000px;cursor:pointer;flex-shrink:0;}
+.card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,0,.2,1);border-radius:14px;}
+.card-scene.flipped .card-inner{transform:rotateY(180deg);}
+.card-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.15),0 2px 6px rgba(0,0,0,.08);display:flex;flex-direction:column;}
+.card-back-face{transform:rotateY(180deg);}
+.holo{position:absolute;inset:0;border-radius:14px;pointer-events:none;border:3px solid transparent;background:linear-gradient(135deg,#ff6b6b55,#ffd93d55,#6bcb7755,#4d96ff55,#c77dff55) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:destination-out;mask-composite:exclude;z-index:10;}
+.flip-hint{text-align:center;font-size:16px;color:#6a7060;font-style:italic;margin-top:10px;}
+
+/* Front */
+.fh{padding:9px 10px 5px;}.fn-the{font-family:'Bangers',cursive;font-size:14px;letter-spacing:1px;color:rgba(255,255,255,.75);line-height:1;display:block;margin-bottom:1px;}
+.fn{font-family:'Bangers',cursive;font-size:24px;letter-spacing:1px;color:#fff;line-height:1;}
+.fts{padding:2px 10px 5px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.8);}
+.fill{height:144px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.fbody{padding:8px 10px 6px;background:#fff;flex:1;}
+.fml{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+.fmt{font-size:11px;font-weight:800;margin-bottom:6px;padding:4px 8px;border-radius:6px;display:inline-block;}
+.fdiv{height:1px;background:#eee;margin:5px 0;}
+.ful{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.fut{font-size:11px;color:#333;line-height:1.4;}
+.ffoot{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#f4f4f4;border-top:1px solid #e8e8e8;}
+.fwk{font-size:9px;color:#888;}.fnum{font-size:9px;color:#bbb;font-weight:800;}
+
+/* Back */
+.bh{padding:8px 12px 6px;}
+.bn-inline{font-family:'Bangers',cursive;font-size:18px;letter-spacing:1px;color:#fff;line-height:1;}
+.bn-inline .the{font-size:13px;color:rgba(255,255,255,.72);margin-right:4px;}
+.bs{font-size:9px;color:rgba(255,255,255,.75);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+.bbody{flex:1;padding:7px 11px;background:#fff;display:flex;flex-direction:column;gap:5px;overflow:hidden;}
+.bsl{font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;display:flex;align-items:center;gap:4px;}
+.bsd{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.baction{font-size:9px;font-weight:800;font-family:monospace;color:#666;margin-bottom:2px;}
+.bst{font-size:10px;color:#333;line-height:1.4;}
+.bdiv{height:1px;background:#eee;flex-shrink:0;}
+.bfoot{padding:5px 10px;background:#f4f4f4;border-top:1px solid #e8e8e8;font-size:9px;color:#aaa;text-align:center;font-style:italic;flex-shrink:0;}
+.copy-btn{font-size:8px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;padding:3px 9px;border-radius:6px;border:none;cursor:pointer;margin-top:5px;display:inline-block;color:#fff;transition:transform .1s;line-height:1.4;font-family:'Nunito',sans-serif;}
+.copy-btn:active{transform:scale(.96);}
+
+/* Card themes */
+.ts .fh,.ts .fts,.ts .bh{background:linear-gradient(135deg,#b84c2a,#d96030);}
+.ts .fill{background:linear-gradient(160deg,#fff5f1,#ffddd0);}
+.ts .fmt{background:#ffeee8;color:#b84c2a;}.ts .fml,.ts .ful{color:#c05030;}.ts .bsl{color:#b84c2a;}.ts .bsd{background:#d96030;}
+.to .fh,.to .fts,.to .bh{background:linear-gradient(135deg,#0f6e56,#1d9e75);}
+.to .fill{background:linear-gradient(160deg,#f0fffa,#c0f0e0);}
+.to .fmt{background:#e0fff5;color:#0f6e56;}.to .fml,.to .ful{color:#0f8060;}.to .bsl{color:#0f6e56;}.to .bsd{background:#1d9e75;}
+.td .fh,.td .fts,.td .bh{background:linear-gradient(135deg,#9a6e00,#c99010);}
+.td .fill{background:linear-gradient(160deg,#fffcf0,#fff3c0);}
+.td .fmt{background:#fff8e0;color:#9a6e00;}.td .fml,.td .ful{color:#a07800;}.td .bsl{color:#9a6e00;}.td .bsd{background:#c99010;}
+.tm .fh,.tm .fts,.tm .bh{background:linear-gradient(135deg,#4a1e9e,#7b4dd4);}
+.tm .fill{background:linear-gradient(160deg,#faf5ff,#e8d4ff);}
+.tm .fmt{background:#f3e8ff;color:#4a1e9e;}.tm .fml,.tm .ful{color:#5a2eae;}.tm .bsl{color:#4a1e9e;}.tm .bsd{background:#7b4dd4;}
+
+/* Find out more button */
+.btn-row{text-align:center;margin:40px 0 0;}
+.find-out-more{font-family:'Bangers',cursive;font-size:1.35rem;letter-spacing:2.5px;background:#1B4332;color:#fff;border:none;padding:16px 56px;border-radius:50px;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;box-shadow:0 4px 16px rgba(27,67,50,0.25);display:inline-flex;align-items:center;gap:10px;}
+.find-out-more:hover{background:#0f2a1e;box-shadow:0 6px 20px rgba(27,67,50,0.35);}
+.find-out-more:active{transform:scale(.97);}
+.find-out-more .arrow{display:inline-block;transition:transform .25s;font-size:1.1rem;}
+.find-out-more.open .arrow{transform:rotate(180deg);}
+
+/* Table section */
+.table-section{max-height:0;overflow:hidden;transition:max-height .7s cubic-bezier(.4,0,.2,1);}
+.table-section.visible{max-height:10000px;}
+.table-inner{padding:52px 0 0;}
+
+/* Researcher section typography */
+.res-eyebrow{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#2D6A4F;margin-bottom:8px;}
+.res-title{font-family:'Bangers',cursive;font-size:1.9rem;letter-spacing:1.5px;color:#1B4332;margin-bottom:28px;}
+.res-divider{height:1px;background:linear-gradient(90deg,#2D6A4F,transparent);margin-bottom:28px;}
+
+.subsection{margin-bottom:28px;}
+.subsection-label{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#2D6A4F;margin-bottom:6px;}
+.subsection-text{font-size:14px;color:#3a3a3a;line-height:1.75;max-width:720px;}
+.subsection-text.subsection-full{max-width:100%;}
+.subsection-text p{margin-bottom:10px;}
+.subsection-text p:last-child{margin-bottom:0;}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin-top:32px;}
+table{width:100%;min-width:860px;border-collapse:separate;border-spacing:0;font-size:12px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);}
+th,td{padding:11px 13px;text-align:left;vertical-align:top;border-bottom:1px solid #e0d8cc;border-right:1px solid #e0d8cc;}
+th:last-child,td:last-child{border-right:none;}
+thead tr.h1 th{background:#1B4332;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;border-bottom:1px solid #2D6A4F;border-right:1px solid rgba(255,255,255,.15);}
+thead tr.h1 th:last-child{border-right:none;}
+thead tr.h2 th{background:#2D6A4F;color:rgba(255,255,255,.85);font-size:10px;font-style:italic;font-weight:400;border-bottom:1px solid #3a7a5c;border-right:1px solid rgba(255,255,255,.12);}
+thead tr.h2 th:last-child{border-right:none;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:rgba(255,255,255,.6);}
+tbody tr:nth-child(odd) td{background:rgba(248,244,236,.7);}
+.role-cell{white-space:nowrap;min-width:90px;}
+.role-the{font-size:9px;font-weight:800;opacity:.65;display:block;margin-bottom:1px;}
+.role-name{font-family:'Bangers',cursive;font-size:18px;letter-spacing:1px;display:block;}
+.role-type{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;display:block;margin-top:2px;opacity:.65;}
+tbody tr:nth-child(1) td.role-cell{background:#ffeee8;}
+tbody tr:nth-child(2) td.role-cell{background:#e0fff5;}
+tbody tr:nth-child(3) td.role-cell{background:#fff8e0;}
+tbody tr:nth-child(4) td.role-cell{background:#f3e8ff;}
+.stocktaker-name{color:#b84c2a;}.outsider-name{color:#0f6e56;}.digger-name{color:#9a6e00;}.mixer-name{color:#4a1e9e;}
+.act{font-family:monospace;font-size:10px;font-weight:700;color:#555;display:block;margin-bottom:3px;}
+.prompt-text{font-style:italic;color:#333;font-size:11px;line-height:1.45;}
+
+/* Page footer */
+.page-footer{text-align:center;margin-top:64px;font-size:11px;color:#999;font-family:'Space Grotesk',sans-serif;letter-spacing:1px;}
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="blob blob-tr"></div>
+  <div class="blob blob-bl"></div>
+  <div class="blob blob-ml"></div>
+  <div class="blob blob-mr"></div>
+</div>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="page-header">
+    <p class="page-eyebrow">Knowledge Building Design Studio</p>
+    <h1 class="page-title">KB GPT Idea Improvement<br>Epistemic Role Cards</h1>
+    <div class="page-divider"></div>
+  </header>
+
+  <!-- Filter bar -->
+  <div class="filter-row" id="fb">
+    <span class="fltr on" data-f="all">All cards</span>
+    <span class="fltr" data-f="s">The Stocktaker</span>
+    <span class="fltr" data-f="o">The Outsider</span>
+    <span class="fltr" data-f="d">The Digger</span>
+    <span class="fltr" data-f="m">The Mixer</span>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards-row" id="cr"></div>
+  <p class="flip-hint">Click any card to flip it</p>
+
+  <!-- Find out more button -->
+  <div class="btn-row">
+    <button class="find-out-more" id="fom-btn" onclick="toggleTable()">
+      Find out more <span class="arrow">&#9660;</span>
+    </button>
+  </div>
+
+  <!-- Teacher/Researcher section -->
+  <div class="table-section" id="table-section">
+    <div class="table-inner">
+
+      <p class="res-eyebrow">Researcher &amp; Teacher Reference</p>
+      <h2 class="res-title">KB GPT Epistemic Roles: Design Rationale</h2>
+      <div class="res-divider"></div>
+
+      <!-- Design Challenge -->
+      <div class="subsection">
+        <p class="subsection-label">The Design Challenge</p>
+        <div class="subsection-text subsection-full">
+          <p>Knowledge Building requires students to treat ideas as improvable objects by identifying gaps in their explanations, pushing from observation to mechanism, evaluating which ideas are worth pursuing, and working toward higher-order explanations through collaborative discourse. These are precisely the epistemic moves that a capable language model can perform quickly and fluently on students' behalf.</p>
+          <p>The risk is epistemic substitution: students receive a well-formed response from KB GPT and treat it as the output of their inquiry, rather than as input to further thinking.</p>
+          <p>The design challenge is therefore not how to maximize KB GPT's usefulness, but how to make it helpful in ways that preserve and deepen students' epistemic agency. This requires strategically delineating the roles KB GPT plays by specifying what it maps, questions, or describes, while also making explicit what students must decide, evaluate, and produce in response. The four epistemic roles below are hence designed to prevent cognitive offloading to AI by ensuring that the most consequential thinking always remains with the students.</p>
+        </div>
+      </div>
+
+      <!-- Framing -->
+      <div class="subsection">
+        <p class="subsection-label">Framing</p>
+        <div class="subsection-text subsection-full">
+          <p>KB GPT is a partner in the shared mission of idea improvement. Partnership means the same goal and co-production of ideas between AI and students.</p>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr class="h1">
+              <th>Role</th>
+              <th>Core Idea Improvement Move</th>
+              <th>Situational Cues</th>
+              <th>Starter Prompt</th>
+              <th colspan="2">Epistemic Co-Production</th>
+            </tr>
+            <tr class="h2">
+              <th></th>
+              <th><em>What this does for students' ideas</em></th>
+              <th><em>Students might need this if&hellip;</em></th>
+              <th><em>Students can try saying this to KB GPT</em></th>
+              <th><em>What KB GPT's job is</em></th>
+              <th><em>What students' job is</em></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="role-cell">
+                <span class="role-the">The</span>
+                <span class="role-name stocktaker-name">Stocktaker</span>
+                <span class="role-type" style="color:#b84c2a;">Coherence Type</span>
+              </td>
+              <td>Making ideas more coherent</td>
+              <td>Group has generated many notes on KF but cannot articulate a clear main claim; keeps going in circles without a clear direction.</td>
+              <td><span class="act">[Import All Notes]</span><span class="prompt-text">"Take stock — What are our key ideas, what evidence backs them, what are we assuming without evidence, and what is missing?"</span></td>
+              <td>Lists an inventory of ideas and evidence without judging whether they are good or bad.</td>
+              <td>Review the Stocktaker's inventory. Decide what you need more or less of. KB GPT takes stock of what's there. You choose what to do about it.</td>
+            </tr>
+            <tr>
+              <td class="role-cell">
+                <span class="role-the">The</span>
+                <span class="role-name outsider-name">Outsider</span>
+                <span class="role-type" style="color:#0f6e56;">Generative Type</span>
+              </td>
+              <td>Making ideas more generative</td>
+              <td>Group has been working on ideas for a while and has lost the ability to evaluate them freshly; struggling to decide which direction is worth pursuing.</td>
+              <td><span class="act">[Import All Notes / Select Notes]</span><span class="prompt-text">"You have no stake in any of these ideas. From the outside, which seems interesting to develop further, and why?"</span></td>
+              <td>Reads all ideas without attachment. Identifies what seems most generative or underexplored — without declaring any idea correct.</td>
+              <td>Consider the Outsider's view, then make your own judgment call. Justify your choice to your group.</td>
+            </tr>
+            <tr>
+              <td class="role-cell">
+                <span class="role-the">The</span>
+                <span class="role-name digger-name">Digger</span>
+                <span class="role-type" style="color:#9a6e00;">Explanatory Type</span>
+              </td>
+              <td>Making ideas more explanatory</td>
+              <td>Group has observations from fieldwork but explanation stays at the surface — they can describe what they noticed but not why it happens or how things work.</td>
+              <td><span class="act">[Select Notes]</span><span class="prompt-text">"Keep asking us why and how until we cannot answer anymore. Do not fill in the gaps — just keep digging until our explanation runs out."</span></td>
+              <td>Keeps asking the next question deeper, from observation and description to rationale and mechanism, from 'what' to 'how' and 'why'.</td>
+              <td>Answer each question the Digger asks. Find out exactly what your explanation lacks. That is where your real inquiry begins.</td>
+            </tr>
+            <tr>
+              <td class="role-cell">
+                <span class="role-the">The</span>
+                <span class="role-name mixer-name">Mixer</span>
+                <span class="role-type" style="color:#4a1e9e;">Integrative Type</span>
+              </td>
+              <td>Making ideas come together</td>
+              <td>Group wants to explore the relationship between two or more ideas — from their own notes, other groups' KF posts, or the nature expert — and senses a connection worth examining.</td>
+              <td><span class="act">[Select Notes]</span><span class="prompt-text">"What is the relationship between these notes? Where do they agree, differ, or complicate each other? Do not tell us what to conclude."</span></td>
+              <td>Brings ideas side by side and describes the relationship honestly — agreement, difference, contradiction, or something unexpected — without resolving it.</td>
+              <td>Consider the relationship between ideas the Mixer revealed. Decide what this means for what you are discussing.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    <p>Knowledge Building Design Studio &middot; Centre for Research in Pedagogy and Practice &middot; NIE</p>
+  </footer>
+
+</div>
+
+<script>
+const CARDS=[
+{id:'s',th:'ts',name:'Stocktaker',type:'Coherence Type',btnLight:'#f0a882',btnDark:'#a03820',move:'Making ideas more coherent',use:'You have too many posts on KF and are not sure what the main ideas are, or cannot state clearly what is being discussed.',avoid:'Counting without deciding',num:'01/04',action:'[Import All Notes]',displayPrompt:'"Take stock — What are our key ideas, what evidence backs them, what are we assuming without evidence, and what is missing?"',copyText:'Take stock — What are our key ideas, what evidence backs them, what are we assuming without evidence, and what is missing?',gpt:'Lists an inventory of ideas and evidence you have without judging whether they are good or bad.',you:"Review the Stocktaker's inventory. Decide what you need more or less of. KB GPT takes stock of what's there. You choose what to do about it.",
+svg:`<svg viewBox="0 0 160 144" width="160" height="144" xmlns="http://www.w3.org/2000/svg"><rect x="84" y="16" width="4" height="112" rx="2" fill="#b09060"/><rect x="148" y="16" width="4" height="112" rx="2" fill="#b09060"/><rect x="82" y="44" width="70" height="6" rx="2" fill="#c8a882"/><rect x="82" y="89" width="70" height="6" rx="2" fill="#c8a882"/><circle cx="100" cy="32" r="8" fill="#ffb347"/><circle cx="118" cy="32" r="8" fill="#74c69d"/><circle cx="136" cy="32" r="8" fill="#6bb5ff"/><circle cx="100" cy="78" r="8" fill="#ff7eb6"/><circle cx="118" cy="78" r="8" fill="#c77dff"/><circle cx="136" cy="78" r="6" fill="#ffb347" opacity=".6"/><circle cx="100" cy="108" r="6" fill="#74c69d" opacity=".7"/><circle cx="118" cy="108" r="5" fill="#6bb5ff" opacity=".5"/><!-- character shifted down 12px --><circle cx="42" cy="34" r="13" fill="#f5c9a0"/><ellipse cx="42" cy="24" rx="13" ry="7" fill="#5c3d1e"/><circle cx="37" cy="35" r="2" fill="#5c3d1e"/><circle cx="47" cy="35" r="2" fill="#5c3d1e"/><path d="M37 41 Q42 45 47 41" stroke="#c0896a" stroke-width="1.2" fill="none"/><rect x="26" y="45" width="32" height="50" rx="7" fill="#e07b50"/><rect x="57" y="62" width="26" height="8" rx="4" fill="#e07b50"/><rect x="79" y="54" width="18" height="24" rx="3" fill="#f5e6c8" stroke="#c8a882" stroke-width="1.5"/><rect x="84" y="52" width="8" height="5" rx="1.5" fill="#c8a882"/><line x1="82" y1="63" x2="94" y2="63" stroke="#999" stroke-width="1"/><line x1="82" y1="67" x2="94" y2="67" stroke="#999" stroke-width="1"/><line x1="82" y1="71" x2="90" y2="71" stroke="#999" stroke-width="1"/><rect x="14" y="54" width="14" height="8" rx="4" fill="#e07b50"/><rect x="30" y="93" width="11" height="36" rx="5" fill="#5a7fbf"/><rect x="43" y="93" width="11" height="36" rx="5" fill="#5a7fbf"/><ellipse cx="35" cy="129" rx="9" ry="5" fill="#333"/><ellipse cx="49" cy="129" rx="9" ry="5" fill="#333"/></svg>`},
+{id:'o',th:'to',name:'Outsider',type:'Generative Type',btnLight:'#70c8a0',btnDark:'#0a5040',move:'Making ideas more generative',use:"Your group is too close to your own ideas to evaluate them freshly, or cannot decide which direction is worth pursuing.",avoid:'Mistaking novelty for promise',num:'02/04',action:'[Import All Notes / Select Notes]',displayPrompt:'"You have no stake in any of these ideas. From the outside, which seems interesting to develop further, and why?"',copyText:'You have no stake in any of these ideas. From the outside, which seems interesting to develop further, and why?',gpt:'Reads all ideas without attachment. Identifies what seems most generative or underexplored — without declaring any idea correct.',you:"Consider the Outsider's view, then make your own judgment call. Justify your choice to your group.",
+svg:`<svg viewBox="0 0 160 144" width="160" height="144" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="58" width="28" height="18" rx="3" fill="#74c69d" opacity=".35" transform="rotate(-8 22 67)"/><rect x="122" y="55" width="28" height="18" rx="3" fill="#ffb347" opacity=".35" transform="rotate(10 136 64)"/><rect x="60" y="100" width="28" height="16" rx="3" fill="#6bb5ff" opacity=".3" transform="rotate(-5 74 108)"/><rect x="62" y="16" width="36" height="22" rx="4" fill="#1e3028"/><ellipse cx="80" cy="38" rx="28" ry="7" fill="#162820"/><rect x="63" y="38" width="34" height="5" rx="2" fill="#1d9e75" opacity=".7"/><circle cx="80" cy="52" r="13" fill="#f5c9a0"/><rect x="64" y="46" width="32" height="10" rx="4" fill="#162820" opacity=".5"/><circle cx="73" cy="53" r="2.2" fill="#1d9e75"/><circle cx="87" cy="53" r="2.2" fill="#1d9e75"/><path d="M74 60 Q80 64 86 60" stroke="#c0896a" stroke-width="1.2" fill="none"/><rect x="56" y="63" width="48" height="50" rx="9" fill="#243c30"/><polygon points="76,63 66,76 76,74" fill="#162820"/><polygon points="84,63 94,76 84,74" fill="#162820"/><rect x="36" y="75" width="22" height="9" rx="4.5" fill="#243c30" transform="rotate(-18 47 79)"/><rect x="102" y="72" width="22" height="9" rx="4.5" fill="#243c30" transform="rotate(18 113 76)"/><rect x="63" y="111" width="13" height="26" rx="6" fill="#162820"/><rect x="84" y="111" width="13" height="26" rx="6" fill="#162820"/><ellipse cx="69" cy="137" rx="10" ry="5" fill="#0d1e14"/><ellipse cx="90" cy="137" rx="10" ry="5" fill="#0d1e14"/></svg>`},
+{id:'d',th:'td',name:'Digger',type:'Explanatory Type',btnLight:'#e0c060',btnDark:'#806000',move:'Making ideas more explanatory',use:'Your group is discussing ideas at the surface (e.g. what is happening) and wants to go deeper to why things happen or how things work.',avoid:'Letting KB GPT fill the gap',num:'03/04',action:'[Select Notes]',displayPrompt:'"Keep asking us why and how until we cannot answer anymore. Do not fill in the gaps — just keep digging until our explanation runs out."',copyText:'Keep asking us why and how until we cannot answer anymore. Do not fill in the gaps — just keep digging until our explanation runs out.',gpt:"Keeps asking the next question deeper, from observation and description to rationale and mechanism, from 'what' to 'how' and 'why'.",you:'Answer each question the Digger asks. Find out exactly what your explanation lacks. That is where your real inquiry begins.',
+svg:`<svg viewBox="0 0 160 144" width="160" height="144" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sky strip (top 38%) -->
+  <rect x="0" y="0" width="160" height="55" fill="#dff0ea" opacity=".6"/>
+  <!-- Layer 1 surface soil -->
+  <rect x="0" y="55" width="160" height="22" fill="#9B6B3A"/>
+  <!-- Layer 2 mid soil -->
+  <rect x="0" y="77" width="160" height="26" fill="#7A4E28"/>
+  <!-- Layer 3 deepest — tallest so star has room -->
+  <rect x="0" y="103" width="160" height="41" fill="#4A2810"/>
+  <!-- Layer dividers -->
+  <line x1="0" y1="77" x2="160" y2="77" stroke="#6B3A1E" stroke-width="1.5" stroke-dasharray="5,3" opacity=".8"/>
+  <line x1="0" y1="103" x2="160" y2="103" stroke="#3A1808" stroke-width="1.5" stroke-dasharray="5,3" opacity=".8"/>
+  <!-- Pebbles in soil -->
+  <ellipse cx="18" cy="64" rx="5" ry="2.5" fill="#7A5030" opacity=".55"/>
+  <ellipse cx="140" cy="88" rx="5" ry="2.5" fill="#5A3010" opacity=".55"/>
+  <ellipse cx="30" cy="90" rx="3" ry="1.5" fill="#6A4020" opacity=".4"/>
+  <!-- ★ STAR — centred in deepest layer (y=103 to y=144, centre at y=124) -->
+  <!-- Outer glow -->
+  <circle cx="68" cy="124" r="22" fill="#FFD700" opacity=".18"/>
+  <!-- Mid glow -->
+  <circle cx="68" cy="124" r="15" fill="#FFD700" opacity=".35"/>
+  <!-- Inner bright glow -->
+  <circle cx="68" cy="124" r="9" fill="#FFEF88" opacity=".7"/>
+  <!-- Star polygon: centre (68,124), outer r=13, inner r=6 -->
+  <polygon points="68,111 71.8,120.2 82,120.2 74.1,126 77.1,136 68,130.4 58.9,136 61.9,126 54,120.2 64.2,120.2" fill="#FFD700" stroke="#E8A000" stroke-width="1.2"/>
+  <!-- Sparkles -->
+  <circle cx="52" cy="115" r="2.2" fill="#FFE566" opacity=".95"/>
+  <circle cx="85" cy="117" r="2.2" fill="#FFE566" opacity=".95"/>
+  <circle cx="68" cy="109" r="1.8" fill="#ffffff" opacity=".9"/>
+  <line x1="68" y1="105" x2="68" y2="102" stroke="#FFD700" stroke-width="1.5" opacity=".7"/>
+  <line x1="79" y1="108" x2="81" y2="106" stroke="#FFD700" stroke-width="1.5" opacity=".7"/>
+  <line x1="57" y1="108" x2="55" y2="106" stroke="#FFD700" stroke-width="1.5" opacity=".7"/>
+  <!-- Digger character (small, upper body only, above ground) -->
+  <!-- Hard hat -->
+  <ellipse cx="114" cy="10" rx="14" ry="4.5" fill="#f5c030"/>
+  <rect x="101" y="6" width="26" height="9" rx="4" fill="#e8b020"/>
+  <circle cx="114" cy="8" r="3.5" fill="#fff8d0"/><circle cx="114" cy="8" r="2" fill="#ffe844"/>
+  <!-- Head -->
+  <circle cx="114" cy="21" r="11" fill="#f5c9a0"/>
+  <circle cx="109" cy="21" r="1.8" fill="#5c3d1e"/><circle cx="119" cy="21" r="1.8" fill="#5c3d1e"/>
+  <path d="M109 27 Q114 30 119 27" stroke="#c0896a" stroke-width="1.2" fill="none"/>
+  <!-- Body -->
+  <rect x="101" y="30" width="26" height="34" rx="6" fill="#e07b30"/>
+  <rect x="101" y="57" width="26" height="5" fill="#7a4010"/>
+  <!-- Left arm to pickaxe -->
+  <path d="M102,42 Q92,47 82,42" stroke="#e07b30" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <!-- Right arm -->
+  <path d="M127,38 Q120,41 114,39" stroke="#e07b30" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <!-- Pickaxe handle (pointing diagonally down into ground) -->
+  <path d="M82,42 L55,68" stroke="#6b3a0f" stroke-width="5" stroke-linecap="round"/>
+  <!-- Pickaxe head at ground surface -->
+  <polygon points="38,63 54,58 58,70 42,75" fill="#a0a8b0"/>
+  <polygon points="38,63 28,59 30,71 42,75" fill="#888898"/>
+  <polygon points="58,70 64,67 68,76 62,79" fill="#b8bcc8"/>
+  <!-- Impact lines -->
+  <line x1="44" y1="56" x2="38" y2="48" stroke="#c8a060" stroke-width="1.5" opacity=".8"/>
+  <line x1="52" y1="54" x2="52" y2="46" stroke="#c8a060" stroke-width="1.5" opacity=".8"/>
+  <line x1="60" y1="56" x2="66" y2="50" stroke="#c8a060" stroke-width="1.5" opacity=".8"/>
+  <!-- Legs visible at surface -->
+  <rect x="105" y="63" width="9" height="14" rx="4" fill="#5a7fbf"/>
+  <rect x="116" y="63" width="9" height="14" rx="4" fill="#5a7fbf"/>
+</svg>`},
+{id:'m',th:'tm',name:'Mixer',type:'Integrative Type',btnLight:'#b090e0',btnDark:'#3a1280',move:'Making ideas come together',use:'Your group wants to explore what happens when two or more ideas meet — whether they agree, clash, or reveal something neither shows alone.',avoid:'Asking KB GPT to conclude for you',num:'04/04',action:'[Select Notes]',displayPrompt:'"What is the relationship between these notes? Where do they agree, differ, or complicate each other? Do not tell us what to conclude."',copyText:'What is the relationship between these notes? Where do they agree, differ, or complicate each other? Do not tell us what to conclude.',gpt:'Brings ideas side by side and describes the relationship honestly — agreement, difference, contradiction, or something unexpected — without resolving it.',you:"Consider the relationship between ideas the Mixer revealed. Decide what this means for what you are discussing.",
+svg:`<svg viewBox="0 0 160 144" width="160" height="144" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="44" width="20" height="46" rx="5" fill="#ffb347" opacity=".85"/><rect x="9" y="36" width="14" height="12" rx="3" fill="#e09020"/><rect x="11" y="30" width="10" height="8" rx="2" fill="#c07010"/><text x="16" y="62" text-anchor="middle" font-size="7" font-weight="800" fill="#7a4010">Idea</text><text x="16" y="71" text-anchor="middle" font-size="8" font-weight="800" fill="#7a4010">A</text><rect x="134" y="44" width="20" height="46" rx="5" fill="#74c69d" opacity=".85"/><rect x="137" y="36" width="14" height="12" rx="3" fill="#1d9e75"/><rect x="139" y="30" width="10" height="8" rx="2" fill="#0f6e56"/><text x="144" y="62" text-anchor="middle" font-size="7" font-weight="800" fill="#0a4030">Idea</text><text x="144" y="71" text-anchor="middle" font-size="8" font-weight="800" fill="#0a4030">B</text><!-- character shifted down 12px --><rect x="64" y="50" width="32" height="44" rx="8" fill="#7b4dd4"/><rect x="69" y="66" width="22" height="34" rx="4" fill="#f0e8ff" opacity=".65"/><circle cx="80" cy="40" r="12" fill="#f5c9a0"/><ellipse cx="80" cy="30" rx="12" ry="6" fill="#5c3d1e"/><circle cx="75" cy="41" r="2" fill="#5c3d1e"/><circle cx="85" cy="41" r="2" fill="#5c3d1e"/><path d="M75 47 Q80 51 85 47" stroke="#c0896a" stroke-width="1.5" fill="none"/><rect x="26" y="65" width="40" height="8" rx="4" fill="#7b4dd4"/><rect x="94" y="65" width="40" height="8" rx="4" fill="#7b4dd4"/><circle cx="26" cy="69" r="5" fill="#f5c9a0"/><circle cx="134" cy="69" r="5" fill="#f5c9a0"/><path d="M26,69 C26,82 62,88 69,92" stroke="#ffb347" stroke-width="2" fill="none" opacity=".7" stroke-dasharray="4,2"/><path d="M134,69 C134,82 98,88 91,92" stroke="#74c69d" stroke-width="2" fill="none" opacity=".7" stroke-dasharray="4,2"/><rect x="68" y="94" width="24" height="10" rx="3" fill="#e8e0ff" stroke="#7b4dd4" stroke-width="1.8"/><rect x="66" y="88" width="28" height="8" rx="3" fill="#7b4dd4" opacity=".8"/><path d="M60,102 L60,132 Q60,137 65,137 L95,137 Q100,137 100,132 L100,102 Z" fill="#f4f0ff" stroke="#7b4dd4" stroke-width="2.5"/><path d="M62,102 L62,120 L98,120 L98,102 Z" fill="#ffb347" opacity=".6"/><path d="M62,120 L62,131 Q62,135 66,135 L94,135 Q98,135 98,131 L98,120 Z" fill="#74c69d" opacity=".6"/><path d="M62,120 Q71,118 80,120 Q89,122 98,120" stroke="#fff" stroke-width="1.5" fill="none" opacity=".7"/><circle cx="80" cy="112" r="3" fill="#fff" opacity=".65"/></svg>`}
+];
+
+function front(c){return`<div class="card-face ${c.th}"><div class="holo"></div><div class="fh"><span class="fn-the">The</span><span class="fn">${c.name}</span></div><div class="fts">${c.type}</div><div class="fill">${c.svg}</div><div class="fbody"><div class="fml">Core idea improvement move</div><div class="fmt">${c.move}</div><div class="fdiv"></div><div class="ful">Use when...</div><div class="fut">${c.use}</div></div><div class="ffoot"><span class="fwk">Avoid: ${c.avoid}</span><span class="fnum">${c.num}</span></div></div>`;}
+function back(c){return`<div class="card-face card-back-face ${c.th}"><div class="holo"></div><div class="bh"><div class="bn-inline"><span class="the">The</span>${c.name}</div><div class="bs">How to use this partner</div></div><div class="bbody"><div><div class="bsl"><div class="bsd"></div>Starter prompt</div><div class="baction">${c.action}</div><div class="bst" style="font-style:italic">${c.displayPrompt}</div><button class="copy-btn" data-card-id="${c.id}" data-light="${c.btnLight}" data-dark="${c.btnDark}" style="background:${c.btnLight};color:#fff;">Copy prompt</button></div><div class="bdiv"></div><div><div class="bsl"><div class="bsd"></div>KB GPT's job</div><div class="bst">${c.gpt}</div></div><div class="bdiv"></div><div><div class="bsl"><div class="bsd"></div>Your job</div><div class="bst">${c.you}</div></div></div><div class="bfoot">Tap card to flip back</div></div>`;}
+
+function attachHandlers(scene,c){
+  scene.addEventListener('click',e=>{if(e.target.closest('.copy-btn'))return;scene.classList.toggle('flipped');});
+  const btn=scene.querySelector('.copy-btn');if(!btn)return;
+  btn.addEventListener('mouseover',()=>{if(!btn.dataset.copying)btn.style.background=btn.dataset.dark;});
+  btn.addEventListener('mouseout',()=>{if(!btn.dataset.copying)btn.style.background=btn.dataset.light;});
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();btn.dataset.copying='1';
+    const confirm=()=>{btn.textContent='Copied!';btn.style.background=btn.dataset.dark;setTimeout(()=>{btn.textContent='Copy prompt';btn.style.background=btn.dataset.light;delete btn.dataset.copying;},1600);};
+    if(navigator.clipboard){navigator.clipboard.writeText(c.copyText).then(confirm).catch(confirm);}
+    else{const ta=document.createElement('textarea');ta.value=c.copyText;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);confirm();}
+  });
+}
+
+function render(f){
+  const row=document.getElementById('cr');row.innerHTML='';
+  CARDS.filter(c=>f==='all'||c.id===f).forEach(c=>{
+    const s=document.createElement('div');s.className='card-scene';
+    s.innerHTML=`<div class="card-inner">${front(c)}${back(c)}</div>`;
+    attachHandlers(s,c);row.appendChild(s);
+  });
+}
+
+document.getElementById('fb').addEventListener('click',e=>{
+  const b=e.target.closest('.fltr');if(!b)return;
+  document.querySelectorAll('.fltr').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');render(b.dataset.f);
+});
+render('all');
+
+function toggleTable(){
+  const sec=document.getElementById('table-section');
+  const btn=document.getElementById('fom-btn');
+  const isOpen=sec.classList.contains('visible');
+  sec.classList.toggle('visible');btn.classList.toggle('open');
+  btn.querySelector('.arrow').innerHTML=isOpen?'&#9660;':'&#9650;';
+  if(!isOpen){setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),80);}
+}
+</script>
+</body>
+</html>
